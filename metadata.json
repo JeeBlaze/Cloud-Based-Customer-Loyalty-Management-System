@@ -1,0 +1,6 @@
+{
+  "name": "AuraLoyalty - Cloud Customer Loyalty & Rewards Platform",
+  "description": "Enterprise cloud-based customer loyalty management platform with real-time points ledger, tiered memberships, rewards redemption, referral tracking, and campaign automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

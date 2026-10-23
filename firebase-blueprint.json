@@ -1,0 +1,216 @@
+{
+  "entities": {
+    "Business": {
+      "title": "Business",
+      "description": "Tenant business profile and loyalty program rules",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "currency": { "type": "string" },
+        "pointsPerCurrency": { "type": "number" },
+        "currencyPerPoint": { "type": "number" },
+        "pointExpiryMonths": { "type": "number" },
+        "ownerEmail": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "currency", "pointsPerCurrency", "currencyPerPoint"]
+    },
+    "Branch": {
+      "title": "Branch",
+      "description": "Physical store location or branch",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "location": { "type": "string" },
+        "managerName": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "code", "businessId"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Loyalty customer account and membership record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "pointsBalance": { "type": "number" },
+        "lifetimePoints": { "type": "number" },
+        "tierId": { "type": "string" },
+        "referralCode": { "type": "string" },
+        "referredBy": { "type": "string" },
+        "segment": { "type": "string" },
+        "totalSpent": { "type": "number" },
+        "purchaseCount": { "type": "number" },
+        "lastPurchaseDate": { "type": "string" },
+        "birthday": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["fullName", "email", "pointsBalance", "tierId", "referralCode"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Immutable ledger record for loyalty points changes and purchases",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "branchId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "type": { "type": "string", "enum": ["EARNED", "REDEEMED", "BONUS", "EXPIRED", "ADJUSTED", "REFERRAL"] },
+        "points": { "type": "number" },
+        "balanceAfter": { "type": "number" },
+        "purchaseAmount": { "type": "number" },
+        "invoiceNumber": { "type": "string" },
+        "description": { "type": "string" },
+        "idempotencyKey": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["customerId", "type", "points", "balanceAfter", "createdAt"]
+    },
+    "Reward": {
+      "title": "Reward",
+      "description": "Catalog reward item available for redemption",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["DISCOUNT_PERCENT", "DISCOUNT_FIXED", "FREE_PRODUCT", "CASHBACK", "GIFT_CARD"] },
+        "pointsCost": { "type": "number" },
+        "discountValue": { "type": "number" },
+        "minTier": { "type": "string" },
+        "stock": { "type": "number" },
+        "redeemedCount": { "type": "number" },
+        "expiryDays": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "type", "pointsCost", "isActive"]
+    },
+    "Redemption": {
+      "title": "Redemption",
+      "description": "Claimed reward voucher with unique coupon code",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "rewardId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "couponCode": { "type": "string" },
+        "pointsSpent": { "type": "number" },
+        "status": { "type": "string", "enum": ["ACTIVE", "USED", "EXPIRED"] },
+        "expiresAt": { "type": "string" },
+        "usedAt": { "type": "string" },
+        "branchId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["rewardId", "customerId", "couponCode", "pointsSpent", "status"]
+    },
+    "Tier": {
+      "title": "Tier",
+      "description": "VIP and loyalty membership level configuration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "color": { "type": "string" },
+        "minSpend": { "type": "number" },
+        "minPoints": { "type": "number" },
+        "multiplier": { "type": "number" },
+        "benefits": { "type": "string" },
+        "rank": { "type": "number" }
+      },
+      "required": ["name", "multiplier", "rank"]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "Promotional or automated loyalty engagement campaign",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["BIRTHDAY", "BONUS_POINTS", "SEASONAL", "WIN_BACK", "ANNIVERSARY"] },
+        "targetSegment": { "type": "string" },
+        "channel": { "type": "string", "enum": ["EMAIL", "SMS", "WHATSAPP", "PUSH"] },
+        "bonusMultiplier": { "type": "number" },
+        "flatBonusPoints": { "type": "number" },
+        "status": { "type": "string", "enum": ["DRAFT", "SCHEDULED", "ACTIVE", "COMPLETED"] },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "sentCount": { "type": "number" },
+        "conversionCount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "type", "channel", "status"]
+    },
+    "Referral": {
+      "title": "Referral",
+      "description": "Tracking customer referral invitations and completions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "referrerCustomerId": { "type": "string" },
+        "refereeEmail": { "type": "string" },
+        "refereeCustomerId": { "type": "string" },
+        "referralCode": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "QUALIFIED", "REWARDED", "FRAUD_REJECTED"] },
+        "referrerRewardPoints": { "type": "number" },
+        "refereeRewardPoints": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "completedAt": { "type": "string" }
+      },
+      "required": ["referrerCustomerId", "referralCode", "status"]
+    }
+  },
+  "firestore": {
+    "/businesses/{businessId}": {
+      "schema": "Business",
+      "description": "Tenant business settings and configurations"
+    },
+    "/branches/{branchId}": {
+      "schema": "Branch",
+      "description": "Stores and branches belonging to businesses"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Loyalty program customer profiles"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Ledger of point earnings, redemptions, and adjustments"
+    },
+    "/rewards/{rewardId}": {
+      "schema": "Reward",
+      "description": "Redeemable catalog rewards"
+    },
+    "/redemptions/{redemptionId}": {
+      "schema": "Redemption",
+      "description": "Customer reward redemptions and coupons"
+    },
+    "/tiers/{tierId}": {
+      "schema": "Tier",
+      "description": "Loyalty tier rules and levels"
+    },
+    "/campaigns/{campaignId}": {
+      "schema": "Campaign",
+      "description": "Automated and promotional marketing campaigns"
+    },
+    "/referrals/{referralId}": {
+      "schema": "Referral",
+      "description": "Referral invitation and qualification logs"
+    }
+  }
+}
